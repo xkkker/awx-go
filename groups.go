@@ -100,3 +100,19 @@ func (g *GroupService) DeleteGroup(id int) (*Group, error) {
 
 	return result, nil
 }
+
+// ListHostsOfGroup list the hosts of specfic group
+func (g *GroupService) ListHostsOfGroup(id int, params map[string]string) ([]*Host, *ListHostsResponse, error) {
+	result := new(ListHostsResponse)
+	endpoint := fmt.Sprintf("/api/v2/groups/%d/hosts", id)
+	resp, err := g.client.Requester.GetJSON(endpoint, result, params)
+	if err != nil {
+		return nil, result, err
+	}
+
+	if err := CheckResponse(resp); err != nil {
+		return nil, result, err
+	}
+
+	return result.Results, result, nil
+}
